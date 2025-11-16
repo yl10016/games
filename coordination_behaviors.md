@@ -2,6 +2,7 @@
 
 Coordination problems are a subtopic in the psychology of cooperation. In particular, while cooperation include altruistic behavior (a cooperator confers a benefit on a partner at a cost to himself), coordination is mutualistic: each cooperator confers a benefit on the other while simultaneously conferring a benefit on themself. Then the problem results from the difficulty of converging on a single solution when more than one is available (Thomas et al., 2014).
 
+
 ## Mechanisms for coordination
 Types of coordination behaviors, as taken from Okhuysen & Bechky (2009)
 1. Plans and rules
@@ -40,9 +41,6 @@ Types of coordination behaviors, as taken from Okhuysen & Bechky (2009)
 10. Developing trust
 
 
-Task: make an inventory of types of coordination behaviors (incl organisational behavior, psych papers)
-* (e.g.: turn taking, log rolling-- we each have a secret pref, our prefs is diff, but somewhere hidden is sth that works for both of us)
-
 ## Game setup
 1. Contextual bandits
     - Goal is to make a sequence of decisions to maximize a reward
@@ -51,6 +49,7 @@ Task: make an inventory of types of coordination behaviors (incl organisational 
     - Example: recommendation systems (based on users' past behavior)
 2. Temporally extended
     - Agents are allowed to communicate over multiple rounds, then decide on a final strategy
+
 
 ## References
 * Thomas, K. A., DeScioli, P., Haque, O. S., & Pinker, S. (2014). The psychology of coordination and common knowledge. Journal of personality and social psychology, 107(4), 657.

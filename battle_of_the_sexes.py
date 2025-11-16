@@ -52,7 +52,7 @@ class Player:
             do_sample=True,
             temperature=0.8,
             top_p=0.9,
-            repetition_penalty=1.2,
+            # repetition_penalty=1.1,
         )
         full_response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
         response = full_response[len(prompt):].strip()
@@ -78,25 +78,28 @@ If you choose Option F and the other player chooses Option F, then you win 10 po
             question += " Please provide a brief justification for your choice."
 
         if round_num == 1:
-            prompt = f"""You are {self.name}. You are playing a game repeatedly with another player. In this game, you can choose between Option J and Option F. You will play 10 rounds in total with the same player. The rules of the game are as follows:
+            prompt = f"""You are {self.name}. You are playing a game repeatedly with another player. In this game, you can choose between Option J and Option F. You will play 5 rounds in total with the same player. The rules of the game are as follows:
 {rules}
 
 You are currently playing round 1.
 {question}
 A:"""
         else:
-            prev_round_info = history[round_num - 2]
-            my_choice = prev_round_info['p1_choice'] if self.name == 'Player 1' else prev_round_info['p2_choice']
-            other_choice = prev_round_info['p2_choice'] if self.name == 'Player 1' else prev_round_info['p1_choice']
-            my_points = prev_round_info['p1_points'] if self.name == 'Player 1' else prev_round_info['p2_points']
-            
-            round_summary = f"In round {round_num - 1}, you chose Option {my_choice} and the other player chose Option {other_choice}. Thus, you won {my_points} points."
+            game_summary = "Here is the history of the game so far:\n"
+            for i, round_info in enumerate(history):
+                round_i = i + 1
+                my_choice = round_info['p1_choice'] if self.name == 'Player 1' else round_info['p2_choice']
+                other_choice = round_info['p2_choice'] if self.name == 'Player 1' else round_info['p1_choice']
+                my_points = round_info['p1_points'] if self.name == 'Player 1' else round_info['p2_points']
+                
+                game_summary += f"Round {round_i}: You chose Option {my_choice}, the other player chose Option {other_choice}. You won {my_points} points.\n"
 
-            if with_explanations:
-                other_justification = prev_round_info['p2_justification'] if self.name == 'Player 1' else prev_round_info['p1_justification']
-                round_summary += f" The other player explained their choice: \"{other_justification}\""
+                # Only add justification for the most recent round
+                if with_explanations and i == len(history) - 1:
+                    other_justification = round_info['p2_justification'] if self.name == 'Player 1' else round_info['p1_justification']
+                    game_summary += f"The other player's justification for the last round was: \"{other_justification}\"\n"
 
-            prompt = f"""{round_summary}
+            prompt = f"""{game_summary}
 You are currently playing round {round_num}.
 {question}
 A:"""
@@ -117,7 +120,7 @@ class Game:
         self.player_2 = player_2
         self.history = []
 
-    def run(self, num_rounds=10, with_explanations=False):
+    def run(self, num_rounds=5, with_explanations=False):
         self.player_1.reset()
         self.player_2.reset()
         self.history = []
@@ -182,7 +185,7 @@ if __name__ == "__main__":
     player_1 = Player("Player 1", model, tokenizer)
     player_2 = Player("Player 2", model, tokenizer)
     
-    num_exp_games = 5
+    num_exp_games = 3
 
     # # Experiment 1: Without explanations
     run_experiment(player_1, player_2, num_games=num_exp_games, with_explanations=False)
