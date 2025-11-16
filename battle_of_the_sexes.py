@@ -41,6 +41,8 @@ class Player:
         self.score = 0
 
     def _generate_response(self, prompt):
+        if self.name == 'Player 1':
+            return "Option J because I prefer going to the Jazz club."
         inputs = self.tokenizer(prompt, return_tensors="pt", padding=True).to(self.model.device)
         
         outputs = self.model.generate(
