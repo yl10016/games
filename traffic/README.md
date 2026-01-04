@@ -56,13 +56,13 @@ python train.py \
   --belief_multiplier_light 0.3 \
   --eval_freq 200 \
   --save_freq 1000 \
-  --save_dir checkpoints_8x8_v2 \
+  --save_dir checkpoints \
   --seed 42
 ```
 
 ```bash
 python test_cases/evaluate.py \
-  --checkpoint checkpoints_8x8_v2/agent_final.pt \
+  --checkpoint checkpoints/agent_final.pt \
   --network_config test_cases/grid_8x8_highway.json \
   --num_drivers 30 \
   --max_steps 50 \
