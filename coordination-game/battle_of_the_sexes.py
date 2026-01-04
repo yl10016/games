@@ -1,12 +1,20 @@
+import os
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import time
 import re
 import numpy as np
+import torch
 
-MODEL_ID = "meta-llama/Llama-3.2-1B"
+os.environ['HF_HOME'] = '/Volumes/ESD-USB/.cache/huggingface'
+MODEL_ID = "meta-llama/Llama-3.2-3B"
 tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
 tokenizer.pad_token = tokenizer.eos_token
+
+device = "cpu"
+print(f"Using device: {device}")
+
 model = AutoModelForCausalLM.from_pretrained(MODEL_ID, trust_remote_code=True)
+model = model.to(device)
 
 def parse_response(response):
     choice = None
@@ -41,20 +49,14 @@ class Player:
         self.score = 0
 
     def _generate_response(self, prompt):
-        if self.name == 'Player 1':
-            return "Option J because I prefer going to the Jazz club."
-        inputs = self.tokenizer(prompt, return_tensors="pt", padding=True).to(self.model.device)
+        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
         
         outputs = self.model.generate(
             inputs.input_ids,
-            attention_mask=inputs.attention_mask,
-            max_new_tokens=64,
-            num_return_sequences=1,
+            max_new_tokens=20,
             pad_token_id=self.tokenizer.eos_token_id,
-            do_sample=True,
-            temperature=0.8,
-            top_p=0.9,
-            # repetition_penalty=1.1,
+            eos_token_id=self.tokenizer.eos_token_id,
+            do_sample=False,  # Use greedy decoding for speed
         )
         full_response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
         response = full_response[len(prompt):].strip()
@@ -72,7 +74,7 @@ If you choose Option J and the other player chooses Option F, then you win 0 poi
 If you choose Option F and the other player chooses Option J, then you win 0 points and the other player wins 0 points.
 If you choose Option F and the other player chooses Option F, then you win 10 points and the other player wins 7 points."""
 
-    def choose_option(self, round_num, history, with_explanations=False):
+    def choose_option(self, round_num, history, with_explanations=True):
         rules = self.get_rules()
         
         question = "Q: Which Option do you choose, Option J or Option F?"

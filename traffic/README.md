@@ -7,7 +7,7 @@ References:
 
 ## Project Overview
 
-- **Operator (RL agent)**: Observes full network state and learns to broadcast regional traffic information (e.g., "North region congested", "East corridor light traffic")
+- **Operator (RL agent)**: Observes full network state and learns to broadcast regional traffic information. Trained via Actor-Critic with n-step returns.
 - **Drivers (currently greedy)**: Use A* heuristic to route based on believed congestion levels, updated by operator signals
 - **Objective**: Minimize system-wide total delay by strategically revealing/hiding traffic information
 
@@ -31,8 +31,8 @@ The operator can broadcast 15 different regional signals:
 When a signal is received:
 1. **Default belief**: Drivers assume uniform distribution (num_drivers / num_edges)
 2. **Signal update**: Multiply belief by factor for affected region
-   - `congested` signal: 2.0× expected traffic
-   - `light` signal: 0.5× expected traffic
+   - `congested` signal: 3.0× expected traffic
+   - `light` signal: 0.3× expected traffic
 3. **Routing**: Use A* heuristic with believed travel times
 
 Ideally, the operator agent learns patterns like:
