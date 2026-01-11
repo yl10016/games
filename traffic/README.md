@@ -3,7 +3,9 @@
 A RL system for optimizing traffic flow through strategic revelation of regional traffic information. The operator learns to provide limited regional traffic signals to drivers, who make routing decisions based on beliefs updated by these signals. 
 
 References:
-1. https://www.mdpi.com/2076-3417/15/2/806
+1. https://www.mdpi.com/2076-3417/15/2/806 (mode of transport)
+2. https://www.nature.com/articles/s41598-024-75638-0 (traffic lights)
+3. https://arxiv.org/html/2511.06260 (modelling driver; NLRL framework)
 
 ## Project Overview
 
@@ -88,8 +90,8 @@ Key hyperparameters:
 - `gamma`: Discount factor (0.95-0.99)
 - `n_step`: N-step returns (5-20)
 - `hidden_dim`: Network size (128-512)
-- `belief_multiplier_congested`: How much drivers trust "congested" signals (default 2.0)
-- `belief_multiplier_light`: How much drivers trust "light" signals (default 0.5)
+- `belief_multiplier_congested`: Multiplicative effect (on number of drivers) for "congested" signals (default 2.0)
+- `belief_multiplier_light`: Multiplicative effect (on number of drivers) for "light" signals (default 0.5)
 
 ### Current results
 ```
